@@ -23,6 +23,9 @@ INSERT INTO employee VALUES (103, '강하늘', 3500000, SYSDATE, '', '1003');
 INSERT INTO employee VALUES (104, '양우주', 4500000, SYSDATE, '여자', '1000');
 INSERT INTO employee VALUES (105, '강남', 2600000, SYSDATE, '남자', '1000');
 
+
+DELETE FROM employee;
+
 -- 사원 자료 검색
 SELECT * FROM employee;
 
