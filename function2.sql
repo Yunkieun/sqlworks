@@ -37,3 +37,10 @@ SELECT MIN(NVL(CNT, 5)) AVERAGE FROM K1; -- 5
 
 COMMIT;
 ROLLBACK;
+
+-- RANK() 함수
+SELECT ename,
+       sal,
+       RANK() OVER(ORDER BY sal DESC) 급여_RANK,
+       DENSE_RANK() OVER(ORDER BY sal DESC) 급여_DENSE_RANK
+FROM employee;
