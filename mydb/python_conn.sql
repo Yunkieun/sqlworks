@@ -6,3 +6,4 @@ CREATE TABLE pytest(
 INSERT INTO pytest VALUES ('PYTHON°ú ORACLE DB ¿¬µ¿');
 
 SELECT * FROM pytest;
+

@@ -1,7 +1,7 @@
--- 날짜 자료형
+-- 날짜 자료형 
 CREATE TABLE ex2(
-    col_date DATE,
-    col_timestamp TIMESTAMP
+    col_date  DATE,
+    col_timestamp  TIMESTAMP
 );
 
 -- hire_date VARCHAR2(20)
@@ -13,5 +13,3 @@ INSERT INTO ex2 VALUES (SYSDATE, SYSTIMESTAMP);
 
 -- 자료 검색
 SELECT * FROM ex2;
-
-DELETE FROM ex2;

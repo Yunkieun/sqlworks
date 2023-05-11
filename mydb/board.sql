@@ -1,78 +1,80 @@
--- board Å×ÀÌºí
+-- board í…Œì´ë¸”
 CREATE TABLE board(
-    bno NUMBER(5) PRIMARY KEY,         -- ±Û¹øÈ£
-    title VARCHAR2(200) NOT NULL,      -- ±ÛÁ¦¸ñ
-    writer VARCHAR2(20) NOT NULL,      -- ÀÛ¼ºÀÚ
-    content VARCHAR2(2000) NOT NULL,   -- ±Û³»¿ë
-    regdate DATE DEFAULT SYSDATE       -- µî·ÏÀÏ
+    bno NUMBER(5) PRIMARY KEY,   --ê¸€ë²ˆí˜¸
+    title VARCHAR2(200) NOT NULL,         --ê¸€ì œëª©
+    writer VARCHAR2(20) NOT NULL,         --ìž‘ì„±ìž
+    content VARCHAR2(2000) NOT NULL,      --ê¸€ë‚´ìš©
+    regdate DATE DEFAULT SYSDATE --ë“±ë¡ì¼
 );
+-- ì‹œí€€ìŠ¤(ì¼ë ¨ë²ˆí˜¸, ìžë™ìˆœë²ˆ)
+CREATE SEQUENCE seq;
+
+-- ì¶”ì²œìˆ˜ ì¹¼ëŸ¼ì„ ì¶”ê°€í•˜ì‹œì˜¤(ì¹¼ëŸ¼ëª…: cnt, ìžë£Œí˜•: NUMBER DEFAULT 0)
+-- ALTER TABLE í…Œì´ë¸”ì´ë¦„ ADD ì¹¼ëŸ¼ëª… ìžë£Œí˜•
+ALTER TABLE board ADD cnt NUMBER DEFAULT 0;
+
+DESC board;
+
+-- ê²Œì‹œê¸€ ì¶”ê°€
+INSERT INTO board(bno, title, writer, content) 
+VALUES(seq.NEXTVAL, 'ê°€ìž…ì¸ì‚¬', 'ê°•ë‚¨ì—­', 'ì•ˆë…•í•˜ì„¸ìš”, ê°€ìž…ì¸ì‚¬ ë“œë ¤ìš”');
+INSERT INTO board(bno, title, writer, content) 
+VALUES(seq.NEXTVAL, 'ê³µì§€ì‚¬í•­ìž…ë‹ˆë‹¤.', 'ê´€ë¦¬ìž', 'ê°€ìž…ì¸ì‚¬ë¥¼ ë‚¨ê²¨ì£¼ì„¸ìš”');
+INSERT INTO board(bno, title, writer, content) 
+VALUES(seq.NEXTVAL, 'ê°€ìž…ì¸ì‚¬ìž…ë‹ˆë‹¤.', 'ì´ê°•', 'ì•ˆë…•í•˜ì„¸ìš”~');
+INSERT INTO board(bno, title, writer, content) 
+VALUES(seq.NEXTVAL, 'ê°€ìž…ì¸ì‚¬ìž…ë‹ˆë‹¤.', 'ì´ê°•', 'ì•ˆë…•í•˜ì„¸ìš”~');
+INSERT INTO board(bno, title, writer, content) 
+VALUES(seq.NEXTVAL, 'ì¢‹ì€ í•˜ë£¨', 'ê¸´í•˜ë£¨', 'ì¢‹ì€ í•˜ë£¨ ë˜ì„¸ìš”');
+
+-- ê²Œì‹œê¸€ ê²€ìƒ‰
+SELECT * FROM board
+ORDER BY regdate DESC;
+
+-- ìž‘ì„±ìžê°€ ê´€ë¦¬ìžì¸ ê²Œì‹œê¸€ì„ ê²€ìƒ‰í•˜ì‹œì˜¤
+SELECT * FROM board 
+WHERE bno = 2;
+
+-- ê²Œì‹œê¸€ì˜ ìž‘ì„±ìžë¥¼ 'ê´€ë¦¬ìž'ì—ì„œ 'admin'ìœ¼ë¡œ ë³€ê²½í•˜ì„¸ìš”.
+-- UPDATE í…Œì´ë¸”ì´ë¦„ SET ì¹¼ëŸ¼ = ë³€ê²½ê°’ WHERE ì ˆ
+UPDATE board SET writer = 'admin'
+WHERE bno = 2;
+
+-- 3ë²ˆ ê²Œì‹œê¸€ì„ ì‚­ì œí•˜ì‹œì˜¤
+-- DELETE FROM í…Œì´ë¸”ì´ë¦„ WHERE ì ˆ
+DELETE FROM board 
+WHERE bno = 3;
+
+-- ìž¬ê·€ ë³µì‚¬(ìžë£Œ ì‚½ìž…)
+-- INSERT INTO(ì¹¼ëŸ¼) (SELECT ì¹¼ëŸ¼ FROM í…Œì´ë¸”ì´ë¦„)
+INSERT INTO board(bno, title, writer, content)
+(SELECT seq.nextval, title, writer, content FROM board);
 
 SELECT ROWNUM, bno, title, content
-FROM board 
+FROM board
 WHERE ROWNUM > 0 AND ROWNUM <= 10;
--- WHERE ROWNUM > 11 AND ROWNUM <= 20; -- ROWNUMÀº 1À» Æ÷ÇÕÇØ¾ßÇÔ
+--WHERE ROWNUM > 11 AND ROWNUM <= 20;  --ROWNUMì€ 1ì„ í¬í•¨í•´ì•¼í•¨
 
--- ÆäÀÌÁö Ã³¸®
-SELECT * 
+-- íŽ˜ì´ì§€ ì²˜ë¦¬
+SELECT *
 FROM
  (SELECT ROWNUM rn, bno, title, content
-  FROM board) 
-WHERE rn >= 11 AND rn <= 20; -- ROWNUMÀÇ º°ÄªÀ» »ç¿ëÇÏ¸é °¡´ÉÇÔ 
+  FROM board)
+WHERE rn >= 11 AND rn <= 20;  -- ROWNUMì˜ ë³„ì¹­ì„ ì‚¬ìš©í•˜ë©´ ê°€ëŠ¥í•¨
 
 -- ROWID
--- µ¥ÀÌÅÍ¸¦ ±¸ºÐÇÏ´Â À¯ÀÏÇÑ °ª
--- ROWID¸¦ ÅëÇØ¼­ µ¥ÀÌÅÍ ÆÄÀÏ, ¾î´À ºí·°¿¡ ÀúÀåµÇ¾î ÀÖ´ÂÁö ¾Ë ¼ö ÀÖÀ½
+-- ë°ì´í„°ë¥¼ êµ¬ë¶„í•˜ëŠ” ìœ ì¼í•œ ê°’
+-- ROWIDë¥¼ í†µí•´ì„œ í…Œì´í„° íŒŒì¼, ì–´ëŠ ë¸”ëŸ­ì— ì €ìž¥ë˜ì–´ ìžˆëŠ” ì§€ ì•Œ ìˆ˜ìžˆìŒ
 SELECT ROWID, bno, title, content
 FROM board;
 
 SELECT ROWID, bno, title, content
 FROM board
-WHERE ROWID = 'AAAS1lAAHAAAAG9AAA';
+WHERE ROWID = 'AAATEdAAHAAAAFrAAA';
 
--- ½ÃÄö½º(ÀÏ·Ã¹øÈ£, ÀÚµ¿¼ø¹ø)
-CREATE SEQUENCE seq;
+-- ì‹œí€€ìŠ¤ ì‚­ì œ
 DROP SEQUENCE seq;
 
-DELETE FROM board;
+-- í…Œì´ë¸” ì‚­ì œ
 DROP TABLE board;
 
--- ÃßÃµ¼ö Ä®·³À» Ãß°¡ÇÏ½Ã¿À.(Ä®·³¸í: cnt, ÀÚ·áÇü:NUMBER DEFAULT 0)
--- ALTER TABLE Å×ÀÌºíÀÌ¸§ ADD Ä®·³¸í ÀÚ·áÇü
-ALTER TABLE board ADD cnt NUMBER DEFAULT 0;
-
-DESC board;
-
--- °Ô½Ã±Û Ãß°¡
-INSERT INTO board(bno, title, writer, content) 
-values(seq.NEXTVAL, '°¡ÀÔÀÎ»ç', '°­³²¿ª', '¾È³çÇÏ¼¼¿ä, °¡ÀÔÀÎ»ç µå·Á¿ä');
-INSERT INTO board(bno, title, writer, content) 
-values(seq.NEXTVAL, '°øÁö»çÇ×ÀÔ´Ï´Ù.', '°ü¸®ÀÚ', '°¡ÀÔÀÎ»ç¸¦ ³²°ÜÁÖ¼¼¿ä~');
-INSERT INTO board(bno, title, writer, content) 
-values(seq.NEXTVAL, '°¡ÀÔÀÎ»çÀÔ´Ï´Ù.', 'ÀÌ°­', '¾È³çÇÏ¼¼¿ä~');
-INSERT INTO board(bno, title, writer, content) 
-values(seq.NEXTVAL, 'ÁÁÀº ÇÏ·ç', '±äÇÏ·ç', 'ÁÁÀº ÇÏ·ç µÇ¼¼¿ä~');
-
-
--- °Ô½Ã±Û °Ë»ö
-SELECT * FROM board
-ORDER BY regdate DESC;
-
--- ÀÛ¼ºÀÚ°¡ °ü¸®ÀÚÀÎ °Ô½Ã±ÛÀ» °Ë»öÇÏ½Ã¿À.
-SELECT * FROM board
-WHERE bno = 2;
-
--- °Ô½Ã±ÛÀÇ ÀÛ¼ºÀÚ¸¦ '°ü¸®ÀÚ'¿¡¼­ 'admin'À¸·Î º¯°æÇÏ¼¼¿ä.
--- UPDATE Å×ÀÌºíÀÌ¸§ SET Ä®·³ = º¯°æ°ª WHERE Àý
-UPDATE board SET writer = 'admin'
-WHERE bno = 2;
-
--- 3¹ø °Ô½Ã±ÛÀ» »èÁ¦ÇÏ½Ã¿À.
--- DELETE FROM Å×ÀÌºíÀÌ¸§ WHERE Àý
-DELETE FROM board WHERE bno = 3;
-
--- Àç±Í º¹»ç (ÀÚ·á »ðÀÔ)
--- INSERT INTO(Ä®·³) (SELECT Ä®·³ FROM Å×ÀÌºíÀÌ¸§)
-INSERT INTO board(bno, title, writer, content)
-(SELECT seq.nextval, title, writer, content FROM board);
-
-ROLLBACK;
